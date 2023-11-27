@@ -1,11 +1,11 @@
-#define ir1  3
-#define ir2  A5 
-#define ir3  A4
-#define ir4  A3
-#define ir5  A2
-#define ir6  A1
-#define ir7  A0
-#define ir8  4
+#define ir1 4
+#define ir2 A0
+#define ir3 A1
+#define ir4 A2
+#define ir5 A3
+#define ir6 A4
+#define ir7 A5
+#define ir8 3
 #define stops 7
 
 int n=0;
@@ -23,7 +23,7 @@ int irr[8];
 int leapTime = 100;
 
 int node[100];
-int v = 130;
+int v = 125;
 int error = 0, prev_error = 0;
 float Kp = 18, Kd = 8; // KP=14, kD=6
 // float kp1= 18 kd1=10;
@@ -171,7 +171,7 @@ void maze_solver(){
     for(int i=0; i<8 ; i++)
        irr[i] = 0;
     t = millis();
-    while (millis() - t < 100) {
+    while (millis() - t < 80) {
       readSensors();
       for (int i = 0; i < 8; i++)
       {
@@ -264,11 +264,11 @@ void LSR() {
     if (!digitalRead(ir1)==1 || !digitalRead(ir2)==1 || !digitalRead(ir3)==1 ||
     !digitalRead(ir4)==1 || !digitalRead(ir5)==1 || !digitalRead(ir6)==1 || !digitalRead(ir7)==1 || !digitalRead(ir8)==1) {
 //      Serial.println("22");
-      while(!digitalRead(ir1)==1 || !digitalRead(ir2)==1 || !digitalRead(ir3)==1)
-        straight();
+      // while(!digitalRead(ir1)==1 || !digitalRead(ir2)==1 || !digitalRead(ir3)==1)
+      //   straight();
 
       t = millis();
-      while(millis() - t <  30)
+      while(millis() - t <  10)
         straight();
 
     if ( digitalRead(ir2)==1 && digitalRead(ir3)==1 && digitalRead(ir4)==1 &&  digitalRead(ir6)==1 && digitalRead(ir7)==1)
@@ -290,7 +290,7 @@ void LSR() {
     }
     else {
       t=millis();
-      while (millis() - t < 40)
+      while (millis() - t < 10)
         straight();
       node[n] = 2;
       n++;
