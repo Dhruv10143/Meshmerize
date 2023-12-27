@@ -22,10 +22,10 @@ int irr[8];
 #define MR2 6
 
 int leapTime = 100;
-int v=200;
+int v=210;
 int node[100];
 int error = 0, prev_error = 0;
-float Kp = 30, Kd = 8; // KP=14, kD=6
+float Kp = 18, Kd = 8; // KP=14, kD=6
 // float kp1= 18 kd1=10;
 int weights[8] = { -10, -7, -5, -1, 1, 5, 7, 10};
 int avg_error = 0, sensors = 0, output = 0, leftmot = 0, rightmot = 0;
@@ -71,7 +71,7 @@ void loop() {
     for(int i=0; i<8 ; i++)
        irr[i] = 0;
     t = millis();
-    while (millis() - t < 52) {
+    while (millis() - t < 60) {
       readSensors();
       for (int i = 0; i < 8; i++)
       {
@@ -172,7 +172,7 @@ void maze_solver(){
     for(int i=0; i<8 ; i++)
        irr[i] = 0;
     t = millis();
-    while (millis() - t < 53) {
+    while (millis() - t < 60) {
       readSensors();
       for (int i = 0; i < 8; i++)
       {
@@ -195,6 +195,9 @@ void maze_solver(){
       t=millis();
       while(millis() - t <  8)
         speed_reduced();
+      t = millis();
+      while(millis()-t<50)
+        //reverse();
       turnLeft();
 
     }
@@ -202,6 +205,9 @@ void maze_solver(){
       t=millis();
       while(millis() - t <  8)
         speed_reduced();
+              t = millis();
+      while(millis()-t<50)
+        //reverse();
       turnRight();
     }
     else{
@@ -239,11 +245,18 @@ void LSR() {
   if (irr[7] && irr[6] && irr[5])
   { 
     t = millis();
+//    done();
     while (millis() - t < 2){
       speed_reduced();
+//      done();
     }
-
-    if (!digitalRead(ir4)==1 && !digitalRead(ir5)==1 && !digitalRead(ir6)==1 && !digitalRead(ir7)==1 ){
+//    done();
+//  t = millis();
+//  while(millis() - t <90){
+//    reverse();
+//  }
+//done();
+    if (!digitalRead(ir4)==1 && !digitalRead(ir5)==1 && !digitalRead(ir6)==1 && !digitalRead(ir7)==1){
       done();
       delay(10000);
       digitalWrite(12,LOW);
@@ -257,6 +270,7 @@ void LSR() {
         check();
       Serial.println("L");
     turnLeft();
+//    done();
   }
 
   else if (irr[0] || irr[1]) {    
@@ -271,8 +285,13 @@ void LSR() {
       while(millis() - t <  3)
         speed_reduced();
 
+
     if ( digitalRead(ir2)==1 && digitalRead(ir3)==1 && digitalRead(ir4)==1 &&  digitalRead(ir6)==1 && digitalRead(ir7)==1)
         {
+//                t = millis();
+//      while(millis()-t<90){
+//        reverse();
+//      }
           node[n]=2;
           n++;
           if (n >= 3)
@@ -292,6 +311,10 @@ void LSR() {
       t=millis();
       while (millis() - t < 3)
         speed_reduced();
+//      t = millis();
+//      while(millis()-t<90){
+//        reverse();
+//      }
       node[n] = 2;
       n++;
       if(n >= 3)
@@ -368,7 +391,7 @@ void turnLeft() {
     delay(10);
   }
 
-  while (digitalRead(ir5)==1 && digitalRead(ir4)==1 && digitalRead(ir6)==1) {  
+  while (digitalRead(ir5)==1 && digitalRead(ir4)==1 ) {  
     if(m>130)
       m=130;      
     analogWrite(ML1, 0);
@@ -376,13 +399,13 @@ void turnLeft() {
     analogWrite(MR1, m);
     analogWrite(MR2, 0);
     m+=20;
-    delay(8);
+    delay(10);
   }
   analogWrite(ML1, 130);  
   analogWrite(ML2, 0);
   analogWrite(MR1, 0);
   analogWrite(MR2, 130);
-  delay(25);
+  delay(40);
   //done();
   while(millis() - t < 10){
        v=0;
@@ -408,7 +431,7 @@ void turnRight() {
     delay(8);
   }
 
-  while ( digitalRead(ir4)==1 && digitalRead(ir5)==1  && digitalRead(ir6) && digitalRead(ir7)) {
+  while ( digitalRead(ir4)==1 && digitalRead(ir5)==1 /*&& digitalRead(ir2)*/) {
         if(m>130)
       m=130; 
 //    Serial.println("2nd");
@@ -417,16 +440,16 @@ void turnRight() {
     analogWrite(MR1, 0);
     analogWrite(MR2, m);
     m+=20;
-    delay(8);
+    delay(10);
   }
   analogWrite(ML1, 0);
   analogWrite(ML2, 130);
   analogWrite(MR1, 130);
   analogWrite(MR2, 0);
-  delay(25);
+  delay(45);
   int t = millis();
 
-  while(millis() - t < 5){
+  while(millis() - t < 10){
     v=0;
     speed_increased();
   }
@@ -436,7 +459,7 @@ void turnRight() {
 
 void turnAround() {
   int m=10;
-while (digitalRead(ir5)==1 && digitalRead(ir4)==1 && digitalRead(ir6) && digitalRead(ir7)) {
+while (digitalRead(ir5)==1 && digitalRead(ir4)==1 /*&& digitalRead(ir6) && digitalRead(ir7)*/) {
       if(m>130)
       m=130; 
 //    Serial.println("1st");
@@ -452,7 +475,7 @@ while (digitalRead(ir5)==1 && digitalRead(ir4)==1 && digitalRead(ir6) && digital
   analogWrite(ML2, 130);
   analogWrite(MR1, 130);
   analogWrite(MR2, 0);
-  delay(25);
+  delay(42);
 
   int t = millis();
   while(millis() - t < 20){
@@ -463,7 +486,7 @@ while (digitalRead(ir5)==1 && digitalRead(ir4)==1 && digitalRead(ir6) && digital
 }
 void speed_reduced(){
   while(v>=0){
-    v-=55;
+    v-=60;
     straight();
     delay(0.1);
 }
@@ -471,9 +494,9 @@ void speed_reduced(){
 }
 void speed_increased(){
   while(v<=200){
-    v+=20;
+    v+=75;
     straight();
-    delay(5);
+    delay(3);
   }
     v=0;
 }
@@ -489,5 +512,12 @@ void normStraight(){
   analogWrite(ML2, LOW);
   analogWrite(MR1, 200);
   analogWrite(MR2, LOW);
+  
+}
+void reverse(){
+  analogWrite(ML1, 0);  
+  analogWrite(ML2, 200);
+  analogWrite(MR1, 0);
+  analogWrite(MR2, 200);
   
 }
