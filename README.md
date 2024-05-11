@@ -1,7 +1,3 @@
-Certainly! Here's a template for a README file for a line follower bot with PID control system and shortest path finding:
-
----
-
 # Line Follower Bot with PID Control System and Shortest Path Finding
 
 This project implements a line follower robot that uses a PID control system for smooth and accurate line following. Additionally, it incorporates a shortest path finding algorithm to navigate efficiently through complex paths.
