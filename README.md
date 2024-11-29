@@ -1,5 +1,5 @@
 # Line Follower Bot with PID Control System and Shortest Path Finding
-
+<div><img src="https://res.cloudinary.com/dc7cojpvn/image/upload/v1732861776/line_follower_bot_ctjmlw.jpg" alt="#"></img></div>
 This project implements a line follower robot that uses a PID control system for smooth and accurate line following. Additionally, it incorporates a shortest path finding algorithm to navigate efficiently through complex paths.
 
 ## Features
